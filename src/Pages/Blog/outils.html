@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bouton d'Outil Supplémentaire</title>
+  <style>
+    body {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .fab-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    .fab-options {
+      position: absolute;
+      display: none;
+      bottom: 85px;
+      right: 20px;
+    }
+
+    .fab-options.active {
+      display: flex;
+    }
+
+    .fab-option {
+      background-color: #28a745;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+
+    .fab-button.draggable {
+      cursor: grab;
+    }
+  </style>
+</head>
+<body>
+  <div class="fab-button" id="mainFab">
+    <i class="fas fa-plus"></i>
+  </div>
+  <div class="fab-options" id="fabOptions">
+    <div class="fab-option">
+      <i class="fas fa-pencil-alt"></i>
+    </div>
+    <div class="fab-option">
+      <i class="fas fa-camera"></i>
+    </div>
+    <div class="fab-option">
+      <i class="fas fa-location-arrow"></i>
+    </div>
+  </div>
+
+  <!-- Link to Font Awesome for icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+  <script>
+    const mainFab = document.getElementById('mainFab');
+    const fabOptions = document.getElementById('fabOptions');
+
+    mainFab.addEventListener('click', () => {
+      fabOptions.classList.toggle('active');
+    });
+  </script>
+  <script>
+    let isDragging = false;
+    let offset = { x: 0, y: 0 };
+
+    mainFab.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      offset = {
+        x: e.clientX - mainFab.getBoundingClientRect().left,
+        y: e.clientY - mainFab.getBoundingClientRect().top
+      };
+      mainFab.classList.add('dragging');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const x = e.clientX - offset.x;
+      const y = e.clientY - offset.y;
+
+      mainFab.style.left = `${x}px`;
+      mainFab.style.top = `${y}px`;
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      mainFab.classList.remove('dragging');
+    });
+
+    function updateOptionsPosition(x, y) {
+      const options = document.querySelectorAll('.fab-option');
+      options.forEach(option => {
+        const optionRect = option.getBoundingClientRect();
+        const xOffset = x - mainFabRect.left - optionRect.width / 2;
+        const yOffset = y - mainFabRect.top - optionRect.height / 2;
+        option.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+      });
+    }
+
+    const mainFabRect = mainFab.getBoundingClientRect();
+    updateOptionsPosition(mainFabRect.left, mainFabRect.top);
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const x = e.clientX - offset.x;
+      const y = e.clientY - offset.y;
+
+      mainFab.style.left = `${x}px`;
+      mainFab.style.top = `${y}px`;
+
+      updateOptionsPosition(x, y);
+    });
+  </script>
+</body>
+</html>

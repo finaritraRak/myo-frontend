@@ -1,0 +1,15 @@
+/* Style pour le texte en gras */
+.bold-text {
+    font-weight: bold;
+  }
+  
+  /* Style pour le texte en italique */
+  .italic-text {
+    font-style: italic;
+  }
+  
+  /* Style pour la numérotation des listes */
+  .numbered-list {
+    list-style-type: decimal;
+  }
+  
